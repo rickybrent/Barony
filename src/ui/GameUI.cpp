@@ -630,6 +630,7 @@ void createUINavigation(const int player)
 		magicButton->setBackground("images/ui/HUD/HUD_Button_Base_Small_00.png");
 		magicButton->setSize(SDL_Rect{ 0, 0, 98, 38 });
 		magicButton->setHideGlyphs(true);
+		magicButton->setHideSelectors(true);
 		magicButton->setColor(makeColor(255, 255, 255, 191));
 		magicButton->setHighlightColor(makeColor(255, 255, 255, 255));
 		magicButton->setCallback([](Button& button) {
@@ -654,6 +655,7 @@ void createUINavigation(const int player)
 		statusButton->setBackground("images/ui/HUD/HUD_Button_Base_Small_00.png");
 		statusButton->setSize(SDL_Rect{ 0, 0, 98, 38 });
 		statusButton->setHideGlyphs(true);
+		statusButton->setHideSelectors(true);
 		statusButton->setColor(makeColor(255, 255, 255, 191));
 		statusButton->setHighlightColor(makeColor(255, 255, 255, 255));
 		statusButton->setCallback([](Button& button) {
@@ -673,6 +675,7 @@ void createUINavigation(const int player)
 		itemsButton->setBackground("images/ui/HUD/HUD_Button_Base_Small_00.png");
 		itemsButton->setSize(SDL_Rect{ 0, 0, 98, 38 });
 		itemsButton->setHideGlyphs(true);
+		itemsButton->setHideSelectors(true);
 		itemsButton->setColor(makeColor(255, 255, 255, 191));
 		itemsButton->setHighlightColor(makeColor(255, 255, 255, 255));
 		itemsButton->setCallback([](Button& button) {
@@ -690,6 +693,7 @@ void createUINavigation(const int player)
 		skillsButton->setBackground("images/ui/HUD/HUD_Button_Base_Small_00.png");
 		skillsButton->setSize(SDL_Rect{ 0, 0, 98, 38 });
 		skillsButton->setHideGlyphs(true);
+		skillsButton->setHideSelectors(true);
 		skillsButton->setColor(makeColor(255, 255, 255, 191));
 		skillsButton->setHighlightColor(makeColor(255, 255, 255, 255));
 		skillsButton->setCallback([](Button& button) {
@@ -2344,6 +2348,7 @@ void Player::CharacterSheet_t::createCharacterSheet()
 			mapButton->setBackground("images/ui/CharSheet/HUD_CharSheet_Button_00.png");
 			mapButton->setSize(buttonPos);
 			mapButton->setHideGlyphs(true);
+			mapButton->setHideSelectors(true);
 			mapButton->setColor(makeColor(255, 255, 255, 255));
 			mapButton->setHighlightColor(makeColor(255, 255, 255, 255));
 			mapButton->setCallback([](Button& button){
@@ -2370,6 +2375,7 @@ void Player::CharacterSheet_t::createCharacterSheet()
 			logButton->setBackground("images/ui/CharSheet/HUD_CharSheet_Button_00.png");
 			logButton->setSize(buttonPos);
 			logButton->setHideGlyphs(true);
+			logButton->setHideSelectors(true);
 			logButton->setColor(makeColor(255, 255, 255, 255));
 			logButton->setHighlightColor(makeColor(255, 255, 255, 255));
 			logButton->setCallback([](Button& button) {
@@ -2433,6 +2439,7 @@ void Player::CharacterSheet_t::createCharacterSheet()
 			timerButton->setColor(makeColor(0, 0, 0, 0));
 			timerButton->setHighlightColor(makeColor(0, 0, 0, 0));
 			timerButton->setHideGlyphs(true);
+			timerButton->setHideSelectors(true);
 			timerButton->setCallback([](Button& button){
 				bool& bShowTimer = players[button.getOwner()]->characterSheet.showGameTimerAlways;
 				bShowTimer = !bShowTimer;
@@ -2465,6 +2472,7 @@ void Player::CharacterSheet_t::createCharacterSheet()
 			skillsButton->setBackground("images/ui/CharSheet/HUD_CharSheet_ButtonWide_00.png");
 			skillsButton->setSize(SDL_Rect{ 0, 0, skillsButtonFrame->getSize().w, skillsButtonFrame->getSize().h });
 			skillsButton->setHideGlyphs(true);
+			skillsButton->setHideSelectors(true);
 			skillsButton->setColor(makeColor(255, 255, 255, 191));
 			skillsButton->setHighlightColor(makeColor(255, 255, 255, 255));
 			skillsButton->setCallback([](Button& button) {
@@ -2493,6 +2501,7 @@ void Player::CharacterSheet_t::createCharacterSheet()
 			dungeonButton->setColor(makeColor(0, 0, 0, 0));
 			dungeonButton->setHighlightColor(makeColor(0, 0, 0, 0));
 			dungeonButton->setHideGlyphs(true);
+			dungeonButton->setHideSelectors(true);
 
 			auto floorNameText = dungeonFloorFrame->addField("dungeon name text", 32);
 			floorNameText->setFont(dungeonFont);
@@ -2565,6 +2574,7 @@ void Player::CharacterSheet_t::createCharacterSheet()
 			classButton->setColor(makeColor(0, 0, 0, 0));
 			classButton->setHighlightColor(makeColor(0, 0, 0, 0));
 			classButton->setHideGlyphs(true);
+			classButton->setHideSelectors(true);
 
 			characterTextPos.x = 8;
 			characterTextPos.w = 190;
@@ -2607,6 +2617,7 @@ void Player::CharacterSheet_t::createCharacterSheet()
 			raceButton->setColor(makeColor(0, 0, 0, 0));
 			raceButton->setHighlightColor(makeColor(0, 0, 0, 0));
 			raceButton->setHideGlyphs(true);
+			raceButton->setHideSelectors(true);
 
 			characterTextPos.x = 4;
 			characterTextPos.w = 194;
@@ -2637,6 +2648,7 @@ void Player::CharacterSheet_t::createCharacterSheet()
 			goldButton->setColor(makeColor(0, 0, 0, 0));
 			goldButton->setHighlightColor(makeColor(0, 0, 0, 0));
 			goldButton->setHideGlyphs(true);
+			goldButton->setHideSelectors(true);
 		}
 
 		{
@@ -2689,6 +2701,7 @@ void Player::CharacterSheet_t::createCharacterSheet()
 				statButton->setColor(makeColor(0, 0, 0, 0));
 				statButton->setHighlightColor(makeColor(0, 0, 0, 0));
 				statButton->setHideGlyphs(true);
+				statButton->setHideSelectors(true);
 			}
 			const int rowSpacing = 4;
 			iconPos.y += iconPos.h + rowSpacing;
@@ -2724,6 +2737,7 @@ void Player::CharacterSheet_t::createCharacterSheet()
 				statButton->setColor(makeColor(0, 0, 0, 0));
 				statButton->setHighlightColor(makeColor(0, 0, 0, 0));
 				statButton->setHideGlyphs(true);
+				statButton->setHideSelectors(true);
 			}
 
 			iconPos.y += iconPos.h + rowSpacing;
@@ -2759,6 +2773,7 @@ void Player::CharacterSheet_t::createCharacterSheet()
 				statButton->setColor(makeColor(0, 0, 0, 0));
 				statButton->setHighlightColor(makeColor(0, 0, 0, 0));
 				statButton->setHideGlyphs(true);
+				statButton->setHideSelectors(true);
 			}
 
 			iconPos.y += iconPos.h + rowSpacing;
@@ -2794,6 +2809,7 @@ void Player::CharacterSheet_t::createCharacterSheet()
 				statButton->setColor(makeColor(0, 0, 0, 0));
 				statButton->setHighlightColor(makeColor(0, 0, 0, 0));
 				statButton->setHideGlyphs(true);
+				statButton->setHideSelectors(true);
 			}
 
 			iconPos.y += iconPos.h + rowSpacing;
@@ -2829,6 +2845,7 @@ void Player::CharacterSheet_t::createCharacterSheet()
 				statButton->setColor(makeColor(0, 0, 0, 0));
 				statButton->setHighlightColor(makeColor(0, 0, 0, 0));
 				statButton->setHideGlyphs(true);
+				statButton->setHideSelectors(true);
 			}
 
 			iconPos.y += iconPos.h + rowSpacing;
@@ -2864,6 +2881,7 @@ void Player::CharacterSheet_t::createCharacterSheet()
 				statButton->setColor(makeColor(0, 0, 0, 0));
 				statButton->setHighlightColor(makeColor(0, 0, 0, 0));
 				statButton->setHideGlyphs(true);
+				statButton->setHideSelectors(true);
 			}
 		}
 
@@ -2908,6 +2926,7 @@ void Player::CharacterSheet_t::createCharacterSheet()
 				attributeButton->setColor(makeColor(0, 0, 0, 0));
 				attributeButton->setHighlightColor(makeColor(0, 0, 0, 0));
 				attributeButton->setHideGlyphs(true);
+				attributeButton->setHideSelectors(true);
 			}
 
 			const int rowSpacing = 4;
@@ -2936,6 +2955,7 @@ void Player::CharacterSheet_t::createCharacterSheet()
 				attributeButton->setColor(makeColor(0, 0, 0, 0));
 				attributeButton->setHighlightColor(makeColor(0, 0, 0, 0));
 				attributeButton->setHideGlyphs(true);
+				attributeButton->setHideSelectors(true);
 			}
 
 			iconPos.y += iconPos.h + rowSpacing;
@@ -2963,6 +2983,7 @@ void Player::CharacterSheet_t::createCharacterSheet()
 				attributeButton->setColor(makeColor(0, 0, 0, 0));
 				attributeButton->setHighlightColor(makeColor(0, 0, 0, 0));
 				attributeButton->setHideGlyphs(true);
+				attributeButton->setHideSelectors(true);
 			}
 
 			iconPos.y += iconPos.h + rowSpacing;
@@ -2990,6 +3011,7 @@ void Player::CharacterSheet_t::createCharacterSheet()
 				attributeButton->setColor(makeColor(0, 0, 0, 0));
 				attributeButton->setHighlightColor(makeColor(0, 0, 0, 0));
 				attributeButton->setHideGlyphs(true);
+				attributeButton->setHideSelectors(true);
 			}
 
 			iconPos.y += iconPos.h + rowSpacing;
@@ -3038,6 +3060,7 @@ void Player::CharacterSheet_t::createCharacterSheet()
 				attributeButton->setColor(makeColor(0, 0, 0, 0));
 				attributeButton->setHighlightColor(makeColor(0, 0, 0, 0));
 				attributeButton->setHideGlyphs(true);
+				attributeButton->setHideSelectors(true);
 			}
 
 			iconPos.y += iconPos.h + rowSpacing;
@@ -3065,6 +3088,7 @@ void Player::CharacterSheet_t::createCharacterSheet()
 				attributeButton->setColor(makeColor(0, 0, 0, 0));
 				attributeButton->setHighlightColor(makeColor(0, 0, 0, 0));
 				attributeButton->setHideGlyphs(true);
+				attributeButton->setHideSelectors(true);
 			}
 		}
 
@@ -10683,6 +10707,7 @@ void createPlayerSpellList(const int player)
 		slider->setHandleImage("images/ui/Main Menus/Settings/Settings_Slider_Boulder00.png");
 		slider->setRailImage("images/ui/Main Menus/Settings/Settings_Slider_Backing00.png");
 		slider->setHideGlyphs(true);
+		slider->setHideSelectors(true);
 
 		const char* font = "fonts/pixel_maz.ttf#32#2";
 		auto titleText = bgFrame->addField("title txt", 64);
@@ -10704,6 +10729,7 @@ void createPlayerSpellList(const int player)
 		closeBtn->setText(language[4053]);
 		closeBtn->setFont(font);
 		closeBtn->setHideGlyphs(true);
+		closeBtn->setHideSelectors(true);
 		closeBtn->setBackground("images/ui/Inventory/HUD_Button_Base_Small_00.png");
 		closeBtn->setCallback([](Button& button) {
 			messagePlayer(button.getOwner(), MESSAGE_DEBUG, "%d: Close spell button clicked", button.getOwner());
@@ -14638,6 +14664,7 @@ void Player::SkillSheet_t::createSkillSheet()
 	slider->setHandleImage("images/ui/Main Menus/Settings/Settings_Slider_Boulder00.png");
 	slider->setRailImage("images/ui/Main Menus/Settings/Settings_Slider_Backing00.png");
 	slider->setHideGlyphs(true);
+	slider->setHideSelectors(true);
 
 	Font* actualFont = Font::get(descFont);
 	int fontHeight;
