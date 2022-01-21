@@ -803,6 +803,8 @@ void steamAchievement(const char* achName)
 #else
 #ifdef USE_EOS
 		EOS.unlockAchievement(achName);
+#elif defined USE_LOCALACHIEVEMENTS
+		LocalAchievements.unlockAchievement(achName);
 #endif
 #endif
 		achievementUnlockedLookup.insert(std::string(achName));
@@ -813,6 +815,9 @@ void steamUnsetAchievement(const char* achName)
 {
 #ifdef USE_EOS
 	printlog("unset achievement not supported for epic online services");
+#endif
+#ifdef USE_LOCALACHIEVEMENTS
+        LocalAchievements.clearAchievement(achName);
 #endif
 #ifndef STEAMWORKS
 	return;
@@ -1180,7 +1185,7 @@ void indicateAchievementProgressAndUnlock(const char* achName, int currentValue,
 {
 #ifdef STEAMWORKS
 	SteamUserStats()->IndicateAchievementProgress(achName, currentValue, maxValue);
-#elif defined USE_EOS
+#elif defined USE_EOS || defined USE_LOCALACHIEVEMENTS
 	UIToastNotificationManager.createStatisticUpdateNotification(achName, currentValue, maxValue);
 #endif
 	if ( currentValue == maxValue )
@@ -1191,8 +1196,8 @@ void indicateAchievementProgressAndUnlock(const char* achName, int currentValue,
 
 void steamIndicateStatisticProgress(int statisticNum, ESteamStatTypes type)
 {
-#if (!defined STEAMWORKS && !defined USE_EOS)
-	return;
+#if (!defined STEAMWORKS && !defined USE_EOS && !defined USE_LOCALACHIEVEMENTS)
+  return;
 #else
 
 	if ( statisticNum >= NUM_STEAM_STATISTICS || statisticNum < 0 )

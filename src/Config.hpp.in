@@ -33,6 +33,10 @@
 	#define BUILD_ENV_GSE "@BUILD_ENV_GSE@"
 #endif
 
+#if @LOCALACHIEVEMENTS_ENABLED@
+	#define USE_LOCALACHIEVEMENTS
+#endif
+
 #if @FMOD@
 	#define USE_FMOD
 #endif

@@ -43,6 +43,9 @@
 #include <ctime>
 #include "sys/stat.h"
 #include "eos.hpp"
+#ifdef USE_LOCALACHIEVEMENTS
+#include "localachievements.hpp"
+#endif
 #include "mod_tools.hpp"
 #include "interface/ui.hpp"
 #include "lobbies.hpp"
@@ -361,7 +364,7 @@ std::vector<std::pair<std::string, int>> menuOptions;
 void initMenuOptions()
 {
 	menuOptions.clear();
-#if (defined USE_EOS && !defined STEAMWORKS)
+#if ((defined USE_EOS || defined USE_LOCALACHIEVEMENTS) && !defined STEAMWORKS)
 	menuOptions.push_back(std::make_pair(language[1303], 1)); // start game
 	menuOptions.push_back(std::make_pair(language[1304], 2)); // intro
 	menuOptions.push_back(std::make_pair(language[3964], 3)); // hall of trials
@@ -446,7 +449,7 @@ void navigateMainMenuItems(bool mode)
 		}
 	}
 
-#if defined USE_EOS && !defined STEAMWORKS
+#if (defined USE_EOS || defined USE_LOCALACHIEVEMENTS) && !defined STEAMWORKS
 	numInGameMenuOptions += 1;
 #endif
 
@@ -626,7 +629,7 @@ bool isAchievementUnlockedForClassUnlock(PlayerRaces race)
 	{
 		return unlocked;
 	}
-#elif defined USE_EOS
+#elif (defined USE_EOS || defined USE_LOCALACHIEVEMENTS)
 	if ( enabledDLCPack1 && race == RACE_SKELETON && achievementUnlocked("BARONY_ACH_BONY_BARON") )
 	{
 		return true;
@@ -833,10 +836,8 @@ void handleInGamePauseMenu()
 	}
 
 	bool achievementsMenu = false;
-#if !defined STEAMWORKS
-#ifdef USE_EOS
-	achievementsMenu = true;
-#endif
+#if ((defined USE_EOS || defined USE_LOCALACHIEVEMENTS) && !defined STEAMWORKS)
+        achievementsMenu = true;
 #endif
 	text.y += 24;
 	++numOption;
@@ -1256,10 +1257,8 @@ void handleTutorialPauseMenu()
 
 	int numOption = 1;
 	bool achievementsMenu = false;
-#if !defined STEAMWORKS
-#ifdef USE_EOS
+#if ((defined USE_EOS || defined USE_LOCALACHIEVEMENTS) && !defined STEAMWORKS)
 	achievementsMenu = true;
-#endif
 #endif
 
 	text.y = yres / 4 + 80;
@@ -1727,7 +1726,7 @@ void handleMainMenu(bool mode)
 					ttfPrintTextFormatted(ttf8, xres - 8 - TTF8_WIDTH * 24, yres - 12 - h - h2 * 2, "Using modified map files");
 				}
 			}
-#if (defined STEAMWORKS || defined USE_EOS)
+#if (defined STEAMWORKS || defined USE_EOS || defined USE_LOCALACHIEVEMENTS)
 			if ( gamemods_disableSteamAchievements
 				|| (intro == false && 
 					(conductGameChallenges[CONDUCT_CHEATS_ENABLED]
@@ -2144,8 +2143,7 @@ void handleMainMenu(bool mode)
 			{
 				ttfPrintText(ttf16, text.x, text.y, menuOptions.at(menuIndex).first.c_str());
 			}
-
-#if (defined USE_EOS && !defined STEAMWORKS)
+#if ((defined USE_EOS || defined USE_LOCALACHIEVEMENTS) && !defined STEAMWORKS)
 			++menuIndex;
 			text.y = yres / 4 + 80 + (menuOptions.at(menuIndex).second - 1) * 24;
 			menuOptionSize = std::max(static_cast<Uint32>(menuOptions.at(menuIndex).first.size()), static_cast<Uint32>(4));
@@ -3487,7 +3485,7 @@ void handleMainMenu(bool mode)
 
 						if ( mouseInBounds(subx1 + 40, subx1 + 72, pady, pady + 16) )
 						{
-#if (defined STEAMWORKS || defined USE_EOS)
+#if (defined STEAMWORKS || defined USE_EOS ||  defined USE_LOCALACHIEVEMENTS)
 							tooltip.x = omousex + 16;
 							tooltip.y = omousey + 16;
 							tooltip.h = TTF12_HEIGHT + 8;
@@ -3891,8 +3889,9 @@ void handleMainMenu(bool mode)
 						else
 						{
 							printlog("[LICENSE]: DLC license key invalid.");
-							windowSerialResult(0);
-						}
+                                                        windowSerialResult(
+                                                            0);
+                                                }
 					}
 					else
 					{
@@ -4834,7 +4833,7 @@ void handleMainMenu(bool mode)
 					if (strlen(flagStringBuffer) > 0)   //Don't bother drawing a tooltip if the file doesn't say anything.
 					{
 						hovering_selection = i;
-#if (!defined STEAMWORKS && !defined USE_EOS)
+#if (!defined STEAMWORKS && !defined USE_EOS && !defined USE_LOCALACHIEVEMENTS)
 						if ( hovering_selection == 0 )
 						{
 							hovering_selection = -1; // don't show cheats tooltip about disabling achievements.
@@ -6689,7 +6688,7 @@ void handleMainMenu(bool mode)
 				if (strlen(flagStringBuffer) > 0)   //Don't bother drawing a tooltip if the file doesn't say anything.
 				{
 					hovering_selection = i;
-#if !defined STEAMWORKS && !defined USE_EOS
+#if !defined STEAMWORKS && !defined USE_EOS && !defined USE_LOCALACHIEVEMENTS
 					if ( hovering_selection == 0 )
 					{
 						hovering_selection = -1; // don't show cheats tooltip about disabling achievements.
@@ -12044,6 +12043,8 @@ void openAchievementsWindow()
 	strcpy(subtext, language[3971]);
 #ifdef USE_EOS
 	EOS.loadAchievementData();
+#elif defined USE_LOCALACHIEVEMENTS
+	LocalAchievements.loadAchievements();
 #endif
 	// close button
 	{

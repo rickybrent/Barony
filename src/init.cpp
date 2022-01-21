@@ -186,6 +186,9 @@ int initApp(char const * const title, int fullscreen)
 	EOS.initAuth();
 #endif // !STEAMWORKS
 #endif
+#if !defined USE_EOS && !defined STEAMWORKS && defined USE_LOCALACHIEVEMENTS
+	LocalAchievements.loadAchievements();
+#endif
 
 	window_title = title;
 	printlog("initializing SDL...\n");

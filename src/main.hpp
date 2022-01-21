@@ -785,3 +785,7 @@ extern CSteamStatistics* g_SteamStatistics;
 #ifdef USE_EOS
 #include "eos.hpp"
 #endif
+
+#ifdef USE_LOCALACHIEVEMENTS
+#include "localachievements.hpp"
+#endif
