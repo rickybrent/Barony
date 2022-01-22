@@ -574,6 +574,8 @@ namespace MainMenu {
 		back_button->setHJustify(Button::justify_t::LEFT);
 		back_button->setVJustify(Button::justify_t::CENTER);
 		back_button->setCallback(callback);
+		back_button->setGlyphPosition(Widget::glyph_position_t::CENTERED_RIGHT);
+		back_button->setButtonsOffset(SDL_Rect{8, 0, 0, 0,});
 		/*back_button->setTickCallback([](Widget& widget) {
 			auto button = static_cast<Button*>(&widget);
 			auto frame = static_cast<Frame*>(button->getParent());
@@ -1341,7 +1343,8 @@ namespace MainMenu {
 		    }
 			});
 		back_button->setWidgetBack("back");
-		back_button->setButtonsOffset(SDL_Rect{16, -25, 0, 0});
+		back_button->setGlyphPosition(Button::glyph_position_t::CENTERED_RIGHT);
+		back_button->setButtonsOffset(SDL_Rect{16, 0, 0, 0,});
 
 		auto font = Font::get(bigfont_outline); assert(font);
 
@@ -1391,7 +1394,7 @@ namespace MainMenu {
 			    });
 		    next->setWidgetBack("back");
 		    next->select();
-		    next->setButtonsOffset(SDL_Rect{-80, -font->height() + 4, 0, 0});
+		    next->setGlyphPosition(Button::glyph_position_t::CENTERED_TOP);
 		}
 
 		auto textbox2 = textbox1->addFrame("story_text_box");
@@ -2247,6 +2250,7 @@ namespace MainMenu {
 		button->setWidgetBack("discard_and_exit");
 		button->addWidgetAction("MenuAlt1", "restore_defaults");
 		button->addWidgetAction("MenuStart", "confirm_and_exit");
+		button->setGlyphPosition(Button::glyph_position_t::CENTERED_BOTTOM);
 		return result;
 	}
 
@@ -2481,6 +2485,7 @@ namespace MainMenu {
 		slider->setWidgetPageRight("tab_right");
 		slider->addWidgetAction("MenuAlt1", "restore_defaults");
 		slider->addWidgetAction("MenuStart", "confirm_and_exit");
+		slider->setGlyphPosition(Button::glyph_position_t::CENTERED);
 		return result;
 	}
 
@@ -2522,6 +2527,7 @@ namespace MainMenu {
 		slider->setRailImage("images/ui/Main Menus/Settings/Settings_Slider_Backing00.png");
 		slider->setHandleSize(SDL_Rect{0, 0, 34, 34});
 		slider->setHandleImage("images/ui/Main Menus/Settings/Settings_Slider_Boulder00.png");
+		slider->setGlyphPosition(Button::glyph_position_t::CENTERED);
 		slider->setCallback([](Slider& slider){
 			Frame* frame = static_cast<Frame*>(slider.getParent());
 			auto actualSize = frame->getActualSize();
@@ -2718,6 +2724,7 @@ namespace MainMenu {
 		slider->setRailImage("images/ui/Main Menus/Settings/GenericWindow/UI_MM14_ScrollBar00.png");
 		slider->setHandleSize(SDL_Rect{0, 0, 34, 34});
 		slider->setHandleImage("images/ui/Main Menus/Settings/GenericWindow/UI_MM14_ScrollBoulder00.png");
+		slider->setGlyphPosition(Button::glyph_position_t::CENTERED);
 		slider->setCallback([](Slider& slider){
 			Frame* frame = static_cast<Frame*>(slider.getParent());
 			auto actualSize = frame->getActualSize();
@@ -3274,7 +3281,7 @@ bind_failed:
 			allSettings.show_hud_enabled, [](Button& button){soundToggle(); allSettings.show_hud_enabled = button.isPressed();});
 #ifndef NINTENDO
 		y += settingsAddBooleanOption(*settings_subwindow, y, "show_ip_address", "Streamer Mode",
-			"If you're a streamer and know what doxxing is, definitely press this button.",
+			"If you're a streamer and know what doxxing is, definitely switch this on.",
 			allSettings.show_ip_address_enabled, [](Button& button){soundToggle(); allSettings.show_ip_address_enabled = button.isPressed();});
 #endif
 
@@ -3668,6 +3675,7 @@ bind_failed:
 		back_button->setHJustify(Button::justify_t::RIGHT);
 		back_button->setVJustify(Button::justify_t::CENTER);
 		back_button->setSize(SDL_Rect{Frame::virtualScreenX - 400, Frame::virtualScreenY - 70, 380, 50});
+		back_button->setGlyphPosition(Widget::glyph_position_t::BOTTOM_RIGHT);
 		back_button->setCallback([](Button& b){
 			destroyMainMenu();
 			createMainMenu(false);
@@ -3890,6 +3898,7 @@ bind_failed:
 			button->setHighlightColor(makeColor(255, 255, 255, 255));
 			button->setTextColor(makeColor(180, 180, 180, 255));
 			button->setTextHighlightColor(makeColor(180, 133, 13, 255));
+			button->setGlyphPosition(Widget::glyph_position_t::CENTERED_RIGHT);
 			button->setSize(SDL_Rect{
 				(Frame::virtualScreenX - 164 * 2) / 2,
 				y - buttons->getSize().y,
@@ -5393,6 +5402,7 @@ bind_failed:
 		);
 
 		auto name_field = card->addField("name", 128);
+		name_field->setGlyphPosition(Widget::glyph_position_t::CENTERED_RIGHT);
 		name_field->setScroll(true);
 		name_field->setGuide((std::string("Enter a name for Player ") + std::to_string(index + 1)).c_str());
 		name_field->setFont(smallfont_outline);
@@ -5774,10 +5784,12 @@ bind_failed:
 		assert(lobby);
 
 		// release any controller assigned to this player
-        if (inputs.hasController(index)) {
+#ifndef NINTENDO
+        if (inputs.hasController(index) && index != 0) {
             inputs.removeControllerWithDeviceID(inputs.getControllerID(index));
             Input::inputs[index].refresh();
         }
+#endif
 
 		auto card = lobby->findFrame((std::string("card") + std::to_string(index)).c_str());
 		if (card) {
@@ -5807,6 +5819,7 @@ bind_failed:
 
 		auto invite = card->addButton("invite_button");
 		invite->setText("Press Start");
+		invite->setHideSelectors(true);
 		invite->setFont(smallfont_outline);
 		invite->setSize(SDL_Rect{(card->getSize().w - 200) / 2, card->getSize().h / 2, 200, 50});
 		invite->setVJustify(Button::justify_t::TOP);
@@ -5815,8 +5828,6 @@ bind_failed:
 		invite->setColor(0);
 		invite->setBorderColor(0);
 		invite->setHighlightColor(0);
-		invite->setHideSelectors(true);
-		invite->setHideGlyphs(true);
 		invite->setWidgetBack("back_button");
 		invite->addWidgetAction("MenuStart", "invite_button");
 		switch (index) {
@@ -6048,8 +6059,8 @@ bind_failed:
 	            }
 	        } else {
 	            // this happens if a controller was bound to the player
-	            inputs.getVirtualMouse(index)->draw_cursor = false;
-	            inputs.getVirtualMouse(index)->lastMovementFromController = true;
+				inputs.getVirtualMouse(index)->draw_cursor = false;
+				inputs.getVirtualMouse(index)->lastMovementFromController = true;
 	            if (inputs.bPlayerUsingKeyboardControl(index)) {
 	                inputs.setPlayerIDAllowedKeyboard(0);
 	            }
@@ -6076,7 +6087,6 @@ bind_failed:
 		    "or click here to assign only the mouse and keyboard", index + 1);
 
 		auto button = dimmer->addButton("button");
-		button->setHideGlyphs(true);
 		button->setHideSelectors(true);
 		button->setBorder(0);
 		button->setColor(makeColor(0, 0, 0, 63));
@@ -6089,6 +6099,8 @@ bind_failed:
 		button->setText(text);
 		button->setCallback(button_func);
 		button->setTickCallback(button_tick_func);
+		button->setGlyphPosition(Widget::glyph_position_t::CENTERED);
+		button->setButtonsOffset(SDL_Rect{0, 48, 0, 0,});
 		button->select();
 
 		Input::waitingToBindControllerForPlayer = index;
@@ -6178,6 +6190,8 @@ bind_failed:
 		continue_button->setWidgetRight("new");
 		continue_button->setWidgetDown("hall_of_trials");
 		continue_button->setWidgetBack("back_button");
+		continue_button->setGlyphPosition(Widget::glyph_position_t::CENTERED);
+		continue_button->setButtonsOffset(SDL_Rect{0, 29, 0, 0,});
 
 		auto new_button = window->addButton("new");
 		new_button->setSize(SDL_Rect{114 * 2, 36 * 2, 68 * 2, 56 * 2});
@@ -6192,6 +6206,8 @@ bind_failed:
 		new_button->setWidgetLeft("continue");
 		new_button->setWidgetDown("hall_of_trials");
 		new_button->setWidgetBack("back_button");
+		new_button->setGlyphPosition(Widget::glyph_position_t::CENTERED);
+		new_button->setButtonsOffset(SDL_Rect{0, 29, 0, 0,});
 
 		if (skipintro) {
 			if (continueAvailable) {
@@ -6926,7 +6942,7 @@ bind_failed:
 		    continueSingleplayer ?
 		    "images/ui/Main Menus/ContinueGame/UI_Cont_Tab_Single_ON_00.png" :
 		    "images/ui/Main Menus/ContinueGame/UI_Cont_Tab_Single_OFF_00.png");
-		singleplayer->setButtonsOffset(SDL_Rect{-singleplayer->getSize().w, -singleplayer->getSize().h/2, 0, 0});
+		singleplayer->setGlyphPosition(Button::glyph_position_t::CENTERED_LEFT);
 		singleplayer->setWidgetRight("multiplayer");
 		singleplayer->setWidgetBack("back");
 		singleplayer->addWidgetAction("MenuAlt2", "delete");
@@ -6974,7 +6990,7 @@ bind_failed:
 		    continueSingleplayer ?
 		    "images/ui/Main Menus/ContinueGame/UI_Cont_Tab_Multi_OFF_00.png" :
 		    "images/ui/Main Menus/ContinueGame/UI_Cont_Tab_Multi_ON_00.png");
-		multiplayer->setButtonsOffset(SDL_Rect{0, -singleplayer->getSize().h/2, 0, 0});
+		multiplayer->setGlyphPosition(Button::glyph_position_t::CENTERED_RIGHT);
 		multiplayer->setWidgetLeft("singleplayer");
 		multiplayer->setWidgetBack("back");
 		multiplayer->addWidgetAction("MenuAlt2", "delete");
@@ -7269,6 +7285,7 @@ bind_failed:
 			button->setHighlightColor(makeColor(255, 255, 255, 255));
 			button->setTextColor(makeColor(180, 180, 180, 255));
 			button->setTextHighlightColor(makeColor(180, 133, 13, 255));
+			button->setGlyphPosition(Widget::glyph_position_t::CENTERED_RIGHT);
 			button->setSize(SDL_Rect{
 				(Frame::virtualScreenX - 164 * 2) / 2,
 				y - buttons->getSize().y,
@@ -7391,6 +7408,7 @@ bind_failed:
 			button->setWidgetPageRight("tab_right");
 			button->addWidgetAction("MenuAlt1", "restore_defaults");
 			button->addWidgetAction("MenuStart", "confirm_and_exit");
+			button->setGlyphPosition(Widget::glyph_position_t::CENTERED_RIGHT);
 			if (c > 0) {
 				button->setWidgetLeft(tabs[c - 1].name);
 			} else {
@@ -7455,6 +7473,7 @@ bind_failed:
 				prevtab = tab;
 			}
 			});
+		tab_left->setGlyphPosition(Button::glyph_position_t::CENTERED);
 
 		auto tab_right = settings->addButton("tab_right");
 		tab_right->setBackground("images/ui/Main Menus/Settings/Settings_Button_R00.png");
@@ -7495,6 +7514,7 @@ bind_failed:
 				nexttab = tab;
 			}
 			});
+		tab_right->setGlyphPosition(Button::glyph_position_t::CENTERED);
 
 		auto tooltip = settings->addField("tooltip", 256);
 		tooltip->setSize(SDL_Rect{92, 590, 948, 32});
@@ -7941,6 +7961,7 @@ bind_failed:
 			button->setHighlightColor(makeColor(255, 255, 255, 255));
 			button->setTextColor(makeColor(180, 180, 180, 255));
 			button->setTextHighlightColor(makeColor(180, 133, 13, 255));
+			button->setGlyphPosition(Widget::glyph_position_t::CENTERED_RIGHT);
 			button->setSize(SDL_Rect{
 				(Frame::virtualScreenX - 164 * 2) / 2,
 				y - buttons->getSize().y,
