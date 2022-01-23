@@ -97,8 +97,8 @@ extern Uint32 timesync;
 extern real_t fps;
 extern bool shootmode;
 static const int NUMCLASSES = 21;
-#define NUMRACES 13
-#define NUMPLAYABLERACES 9
+#define NUMRACES 14
+#define NUMPLAYABLERACES 10
 extern char address[64];
 extern bool loadnextlevel;
 extern int skipLevelsOnLoad;
@@ -154,6 +154,7 @@ enum PlayerRaces : int
 	RACE_INCUBUS,
 	RACE_GOBLIN,
 	RACE_INSECTOID,
+	RACE_GNOME,
 	RACE_RAT,
 	RACE_TROLL,
 	RACE_SPIDER,

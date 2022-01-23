@@ -16946,6 +16946,10 @@ void Entity::setHelmetLimbOffset(Entity* helm)
 				helm->focaly = limbs[monster][9][1] - 3.2;
 				helm->focalz = limbs[monster][9][2] + 2.5;
 				break;
+			case GNOME:
+				helm->focalx = limbs[monster][9][0] - 0.5;
+				helm->focaly = limbs[monster][9][1] - 3.7;
+				helm->focalz = limbs[monster][9][2] + 0.5;
 			default:
 				break;
 		}
@@ -17053,6 +17057,15 @@ void Entity::setHelmetLimbOffset(Entity* helm)
 					helm->focaly += 0.25;
 				}
 				break;
+			case GNOME:
+				helm->focalx = limbs[monster][9][0] - 0.5;
+				helm->focaly = limbs[monster][9][1] - 3;
+				helm->focalz = limbs[monster][9][2] + 0.5;
+				if ( helm->sprite == items[PUNISHER_HOOD].index )
+				{
+					helm->focaly += 0.25;
+				}
+				break;
 			default:
 				break;
 		}
@@ -17100,6 +17113,11 @@ void Entity::setHelmetLimbOffset(Entity* helm)
 				helm->focaly = limbs[monster][9][1] - 5;
 				helm->focalz = limbs[monster][9][2] + 2.5;
 				break;
+			case GNOME:
+				helm->focalx = limbs[monster][9][0] - 0.5;
+				helm->focaly = limbs[monster][9][1] - 5.25;
+				helm->focalz = limbs[monster][9][2] + 0.5;
+				break;				
 			default:
 				break;
 		}
@@ -17148,6 +17166,11 @@ void Entity::setHelmetLimbOffset(Entity* helm)
 					helm->focaly -= 0.25;
 				}
 				break;
+			case GNOME:
+				helm->focalx = limbs[monster][9][0] - 0.5;
+				helm->focaly = limbs[monster][9][1] - 5;
+				helm->focalz = limbs[monster][9][2] + 0.5;				
+				break;				
 			default:
 				break;
 		}
@@ -17203,6 +17226,13 @@ void Entity::setHelmetLimbOffset(Entity* helm)
 				//	helm->focaly -= 0.25;
 				//}
 				break;
+			case GNOME:
+				/// .75,0,-2 is perfect except the beard.
+				helm->focalx = limbs[monster][9][0] + 1.75; // forward/back
+				helm->focaly = limbs[monster][9][1]; // left/right
+				helm->focalz = limbs[monster][9][2] - 1.35; // down/up
+				helm->pitch -= PI / 12;
+				break;				
 			case SHADOW:
 			default:
 				break;
@@ -17213,6 +17243,9 @@ void Entity::setHelmetLimbOffset(Entity* helm)
 		if ( monster == GOBLIN && this->sprite == 752 ) // special female offset.
 		{
 			helm->focalz = limbs[monster][9][2] - 0.25; // all non-hat helms
+		} else if ( monster == GNOME )
+		{
+			helm->focalz = limbs[monster][9][2] - 2.5; // all non-hat helms
 		}
 	}
 }
@@ -17631,12 +17664,81 @@ void Entity::setHumanoidLimbOffset(Entity* limb, Monster race, int limbType)
 	{
 		return;
 	}
-	if ( limbType == LIMB_HUMANOID_TORSO )
+	if ( limbType == LIMB_HUMANOID_TORSO || limbType == LIMB_HUMANOID_RIGHTLEG || limbType == LIMB_HUMANOID_LEFTLEG)
 	{
 		limb->scalez = 1.f; // reset this scale incase something modifies this.
 	}
+	double armDistance = 2.5;
+	bool wearing = false;
 	switch ( race )
 	{
+		case GNOME:
+			if (!((limb->sprite >= 295 && limb->sprite <= 302)  || 
+				(limb->sprite >= 995 && limb->sprite <= 1012)))
+			{
+				wearing = true;
+			}
+			if ( limbType == LIMB_HUMANOID_TORSO )
+			{
+				limb->x -= .25 * cos(this->yaw);
+				limb->y -= .25 * sin(this->yaw);
+				if (wearing)
+				{
+					limb->scalez = 0.8;
+				}
+				limb->z += 1.25;
+			}
+			else if ( limbType == LIMB_HUMANOID_RIGHTLEG )
+			{
+				limb->x += 1.25 * cos(this->yaw + PI / 2);
+				limb->y += 1.25 * sin(this->yaw + PI / 2);
+				limb->z += 2.75;
+				if (wearing) {
+					limb->scalez = 0.6;
+					limb->z -= 0.25;
+				}
+				if ( this->z >= 3.9 && this->z <= 4.1 )
+				{
+					limb->yaw += PI / 8;
+					limb->pitch = -PI / 2;
+				}
+			}
+			else if ( limbType == LIMB_HUMANOID_LEFTLEG )
+			{
+				limb->x -= 1.25 * cos(this->yaw + PI / 2);
+				limb->y -= 1.25 * sin(this->yaw + PI / 2);
+				limb->z += 2.75;
+				if (wearing) {
+					limb->scalez = 0.6;
+					limb->z -= 0.25;
+				}				
+				if ( this->z >= 3.0 && this->z <= 4.1 )
+				{
+					limb->yaw -= PI / 8;
+					limb->pitch = -PI / 2;
+				}
+			}
+			else if ( limbType == LIMB_HUMANOID_RIGHTARM )
+			{
+				limb->x += (wearing ? 2.25 : 2.5) * cos(this->yaw + PI / 2) - .75 * cos(this->yaw);
+				limb->y += (wearing ? 2.25 : 2.5) * sin(this->yaw + PI / 2) - .75 * sin(this->yaw);
+				limb->z -= .25;
+				if ( this->z >= 3.9 && this->z <= 4.1 )
+				{
+					limb->pitch = 0;
+				}
+			}
+			else if ( limbType == LIMB_HUMANOID_LEFTARM )
+			{
+				limb->x -= (wearing ? 2.25 : 2.5) * cos(this->yaw + PI / 2) + .75 * cos(this->yaw);
+				limb->y -= (wearing ? 2.25 : 2.5) * sin(this->yaw + PI / 2) + .75 * sin(this->yaw);
+				limb->z -= .25;
+				if ( this->z >= 3.9 && this->z <= 4.1 )
+				{
+					limb->pitch = 0;
+				}
+			}
+			break;
 		case CREATURE_IMP:
 			if ( limbType == LIMB_HUMANOID_TORSO )
 			{
@@ -18289,6 +18391,7 @@ void Entity::handleHumanoidShieldLimb(Entity* shieldLimb, Entity* shieldArmLimb)
 			break;
 		case GOBLIN:
 		case GOATMAN:
+		case GNOME:
 		case INSECTOID:
 		case INCUBUS:
 		case SUCCUBUS:
@@ -18311,7 +18414,10 @@ void Entity::handleHumanoidShieldLimb(Entity* shieldLimb, Entity* shieldArmLimb)
 				shieldLimb->focaly = limbs[race][7][1] - 1;
 				shieldLimb->focalz = limbs[race][7][2];
 			}*/
-
+			if ( race == GNOME )
+			{
+				shieldLimb->z -= 2;
+			}
 			if ( shieldLimb->sprite == items[TOOL_TORCH].index )
 			{
 				flameEntity = spawnFlame(shieldLimb, SPRITE_FLAME);

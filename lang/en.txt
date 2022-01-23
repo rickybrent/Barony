@@ -4026,6 +4026,7 @@ current food situation will last.#
 3167 incubus#
 3168 goblin#
 3169 insectoid#
+3170 gnome#
 
 3175 Use left click or press left/right to toggle between active customization type.#
 

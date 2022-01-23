@@ -2437,6 +2437,10 @@ bool spellIsNaturallyLearnedByRaceOrClass(Entity& caster, Stat& stat, int spellI
 	{
 		return true;
 	}
+	else if ( stat.playerRace == RACE_GNOME && stat.appearance == 0 && (spellID == SPELL_SALVAGE) )
+	{
+		return true;
+	}
 	
 	// class specific:
 	int playernum = caster.skill[2];

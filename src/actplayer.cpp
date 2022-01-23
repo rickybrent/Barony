@@ -2535,6 +2535,8 @@ void actPlayer(Entity* my)
 			case CREATURE_IMP:
 				zOffset = -3.5;
 				break;
+			case GNOME:
+				zOffset = 2.25;
 			default:
 				break;
 		}
@@ -2563,6 +2565,9 @@ void actPlayer(Entity* my)
 		{
 			switch ( playerRace )
 			{
+				case GNOME:
+					my->z = 4;
+					break;
 				case GOBLIN:
 				case GOATMAN:
 				case INSECTOID:
@@ -3434,6 +3439,17 @@ void actPlayer(Entity* my)
 					my->sprite = 742;
 				}
 			}
+			else if ( playerRace == GNOME )
+			{
+				if ( stats[PLAYER_NUM]->sex == FEMALE )
+				{
+					my->sprite = 1005;
+				}
+				else
+				{
+					my->sprite = 996;
+				}
+			}			
 		}
 		else if ( playerAppearance < 5 )
 		{
@@ -4173,6 +4189,10 @@ void actPlayer(Entity* my)
 				{
 					entity->z += 0.25;
 				}
+				else if ( playerRace == GNOME )
+				{
+					entity->z += 0;
+				}
 			}
 
 			if ( bodypart > 12 )
@@ -4864,7 +4884,7 @@ void actPlayer(Entity* my)
 					}
 					my->setHumanoidLimbOffset(entity, playerRace, LIMB_HUMANOID_LEFTLEG);
 					break;
-					// right arm
+				// right arm
 				case 4:
 				{
 					if ( multiplayer != CLIENT )
@@ -4881,7 +4901,7 @@ void actPlayer(Entity* my)
 							}
 						}
 						if ( (!PLAYER_ARMBENDED && showEquipment) || (insectoidLevitating[PLAYER_NUM] && PLAYER_ATTACK == 0 && PLAYER_ATTACKTIME == 0) )
-						{
+						{							
 							entity->sprite += 2 * (stats[PLAYER_NUM]->weapon != NULL);
 
 							if ( stats[PLAYER_NUM]->weapon == nullptr
@@ -5209,7 +5229,7 @@ void actPlayer(Entity* my)
 					}
 					my->handleHumanoidShieldLimb(entity, shieldarm);
 					break;
-					// cloak
+				// cloak
 				case 8:
 					entity->focalx = limbs[playerRace][8][0];
 					entity->focaly = limbs[playerRace][8][1];
@@ -5283,15 +5303,26 @@ void actPlayer(Entity* my)
 							entity->focaly = limbs[playerRace][8][1] - 0.25;
 							entity->focalz = limbs[playerRace][8][2] - 0.5;
 						}
+						else if ( playerRace == GNOME )
+						{
+							entity->focaly = limbs[playerRace][8][1] - 0.25;
+							entity->focalz = limbs[playerRace][8][2] - 0.5;
+						}
 
 						entity->scalex = 0.99;
 						entity->scaley = 0.99;
+					}
+					if ( playerRace == GNOME ) {
+						// All cloaks on gnomes.
+						entity->focaly += 0.25;
+						entity->focalz -= 1.25;
+						entity->scalez = 0.85;
 					}
 					entity->x -= cos(my->yaw);
 					entity->y -= sin(my->yaw);
 					entity->yaw += PI / 2;
 					break;
-					// helm
+				// helm
 				case 9:
 					helmet = entity;
 					entity->focalx = limbs[playerRace][9][0]; // 0
@@ -5338,7 +5369,7 @@ void actPlayer(Entity* my)
 					}
 					my->setHelmetLimbOffset(entity);
 					break;
-					// mask
+				// mask
 				case 10:
 					entity->focalx = limbs[playerRace][10][0]; // 0
 					entity->focaly = limbs[playerRace][10][1]; // 0
@@ -5410,6 +5441,12 @@ void actPlayer(Entity* my)
 						entity->focalx = limbs[playerRace][10][0] + .25; // .25
 						entity->focaly = limbs[playerRace][10][1] - 2.25; // -2.25
 						entity->focalz = limbs[playerRace][10][2]; // .5
+						if (playerRace == GNOME)
+						{
+							entity->focaly -= 0.25;
+							entity->focalz += 0.5;
+						}
+
 						if ( helmet && !helmet->flags[INVISIBLE] && helmet->sprite == items[PUNISHER_HOOD].index )
 						{
 							switch ( playerRace )
@@ -6006,6 +6043,7 @@ bool Entity::isPlayerHeadSprite()
 		case 127:
 		case 128:
 		case 129:
+		case 295:
 		case 332:
 		case 333:
 		case 341:
@@ -6049,6 +6087,10 @@ bool Entity::isPlayerHeadSprite()
 		case 817:
 		case 823:
 		case 827:
+		case 995:
+		case 996:
+		case 1004:
+		case 1005:
 			// TODO
 			return true;
 			break;
@@ -6107,6 +6149,9 @@ Monster Entity::getMonsterFromPlayerRace(int playerRace)
 			break;
 		case RACE_IMP:
 			return CREATURE_IMP;
+			break;
+		case RACE_GNOME:
+			return GNOME;
 			break;
 		default:
 			return HUMAN;
@@ -6207,6 +6252,16 @@ void Entity::setDefaultPlayerModel(int playernum, Monster playerRace, int limbTy
 				case TROLL:
 					this->sprite = 818;
 					break;
+				case GNOME:
+					if ( stats[playernum]->sex == FEMALE )
+					{
+						this->sprite = 1006;
+					}
+					else
+					{
+						this->sprite = 997;
+					}
+					break;
 				default:
 					break;
 			}
@@ -6283,6 +6338,16 @@ void Entity::setDefaultPlayerModel(int playernum, Monster playerRace, int limbTy
 					break;
 				case TROLL:
 					this->sprite = 822;
+					break;
+				case GNOME:
+					if ( stats[playernum]->sex == FEMALE )
+					{
+						this->sprite = 1012;
+					}
+					else
+					{
+						this->sprite = 1002;
+					}
 					break;
 				default:
 					break;
@@ -6361,6 +6426,16 @@ void Entity::setDefaultPlayerModel(int playernum, Monster playerRace, int limbTy
 				case TROLL:
 					this->sprite = 821;
 					break;
+				case GNOME:
+					if ( stats[playernum]->sex == FEMALE )
+					{
+						this->sprite = 1011;
+					}
+					else
+					{
+						this->sprite = 1003;
+					}
+					break;
 				default:
 					break;
 			}
@@ -6424,6 +6499,16 @@ void Entity::setDefaultPlayerModel(int playernum, Monster playerRace, int limbTy
 				case TROLL:
 					this->sprite = 820;
 					break;
+				case GNOME:
+					if ( stats[playernum]->sex == FEMALE )
+					{
+						this->sprite = 1008;
+					}
+					else
+					{
+						this->sprite = 999;
+					}
+					break;
 				default:
 					break;
 			}
@@ -6486,6 +6571,16 @@ void Entity::setDefaultPlayerModel(int playernum, Monster playerRace, int limbTy
 					break;
 				case TROLL:
 					this->sprite = 819;
+					break;
+				case GNOME:
+					if ( stats[playernum]->sex == FEMALE )
+					{
+						this->sprite = 1007;
+					}
+					else
+					{
+						this->sprite = 998;
+					}
 					break;
 				default:
 					break;

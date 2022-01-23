@@ -711,6 +711,8 @@ int isCharacterValidFromDLC(Stat& myStats, int characterClass)
 				return INVALID_REQUIREDLC2;
 			}
 			break;
+		case RACE_GNOME:
+			break;
 		default:
 			break;
 	}
@@ -759,7 +761,7 @@ int isCharacterValidFromDLC(Stat& myStats, int characterClass)
 			return isAchievementUnlockedForClassUnlock(RACE_GOATMAN) ? VALID_OK_CHARACTER : INVALID_REQUIRE_ACHIEVEMENT;
 			break;
 		case CLASS_MACHINIST:
-			if ( myStats.playerRace == RACE_AUTOMATON )
+			if ( myStats.playerRace == RACE_AUTOMATON ||  myStats.playerRace == RACE_GNOME )
 			{
 				return VALID_OK_CHARACTER;
 			}

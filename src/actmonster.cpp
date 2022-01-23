@@ -1430,7 +1430,7 @@ void actMonster(Entity* my)
 				my->flags[BURNABLE] = false;
 				impMoveBodyparts(my, NULL, sqrt(MONSTER_VELX * MONSTER_VELX + MONSTER_VELY * MONSTER_VELY));
 			}
-			else if ( my->sprite == 295 )     // gnome head
+			else if ( my->sprite == 295 || my->sprite == 995 || my->sprite == 996 || my->sprite == 1004 || my->sprite == 1005) // gnome heads
 			{
 				gnomeMoveBodyparts(my, NULL, sqrt(MONSTER_VELX * MONSTER_VELX + MONSTER_VELY * MONSTER_VELY));
 			}

@@ -234,7 +234,7 @@ int Entity::getMonsterTypeFromSprite()
 	{
 		return CREATURE_IMP;
 	}
-	else if ( mySprite == 295 )     // gnome head
+	else if ( mySprite == 295 || mySprite == 995 || mySprite == 996 || mySprite == 1004 || mySprite == 1005) // gnome heads
 	{
 		return GNOME;
 	}

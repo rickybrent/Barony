@@ -2415,6 +2415,10 @@ void initClass(const int player)
 		{
 			addSpell(SPELL_SALVAGE, player, true);
 		}
+		else if ( stats[player]->playerRace == RACE_GNOME && stats[player]->appearance == 0 )
+		{
+			addSpell(SPELL_SALVAGE, player, true);
+		}
 
 		if ( stats[player]->PROFICIENCIES[PRO_ALCHEMY] >= 0 )
 		{
